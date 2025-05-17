@@ -7,15 +7,25 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
 }
 
 .container {
     max-width: 800px;
+    width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 15px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+/* Media query for small screens */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
 }
 
 header {
@@ -35,10 +45,18 @@ header {
     font-family: monospace;
     font-size: 14px;
     outline: none;
+    box-sizing: border-box;
 }
 
 #search-input::placeholder {
     color: #000;
+}
+
+@media (max-width: 480px) {
+    #search-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: 6px 4px;
+    }
 }
 
 main {
@@ -49,11 +67,25 @@ main {
 #response-container {
     font-size: 24px;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .highlighted-text {
     background-color: #ff9980;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Media query for small screens */
+@media (max-width: 480px) {
+    #response-container {
+        font-size: 18px;
+    }
+
+    .highlighted-text {
+        padding: 8px;
+    }
 }
 
 footer {
@@ -61,10 +93,23 @@ footer {
     text-align: right;
     padding: 20px 0;
     font-size: 12px;
+    word-wrap: break-word;
 }
 
 .footer-text {
     text-align: right;
+}
+
+/* Media query for small screens */
+@media (max-width: 480px) {
+    footer {
+        font-size: 10px;
+    }
+
+    .footer-text a {
+        display: inline-block;
+        margin-top: 5px;
+    }
 }
 
 /* Error handling styles */
@@ -115,9 +160,20 @@ footer {
     padding: 30px;
     border: 1px solid #ff9980;
     max-width: 500px;
-    width: 80%;
+    width: 90%;
     position: relative;
     font-family: monospace;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Media query for small screens */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px 15px;
+        width: 95%;
+    }
 }
 
 .modal-close {
