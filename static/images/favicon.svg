@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#FFEEE6"/>
+
+  <!-- Letter T for Tolerable -->
+  <path d="M10 8H22V12H18V24H14V12H10V8Z" fill="#FF9980"/>
+
+  <!-- Decorative dot -->
+  <circle cx="16" cy="26" r="2" fill="#FF9980"/>
+</svg>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tolerable AI - Human Verification">
+    <meta name="keywords" content="AI, media, verification, human, captcha">
+    <meta name="author" content="Tolerable AI">
+    <meta name="theme-color" content="#ffeee6">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Tolerable AI - Human Verification">
+    <meta property="og:description" content="Verify you're human to access Tolerable AI">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Tolerable AI logo">
+    <meta property="twitter:card" content="summary_large_image">
+
+    <title>Tolerable AI - Human Verification</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .verify-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .verify-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .verify-subtitle {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .giphy-container {
+            margin: 30px 0;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .verification-form {
+            margin-top: 30px;
+        }
+
+        .verification-input {
+            padding: 10px 15px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .verification-button {
+            background-color: #ff9980;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .verification-button:hover {
+            background-color: #ff8066;
+        }
+
+        .error-message {
+            color: #ff5555;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .hint {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Tolerable AI Logo" width="80" height="80">
+                <h1 style="margin-top: 10px;">Tolerable AI</h1>
+            </div>
+        </header>
+
+        <main class="verify-container">
+            <h2 class="verify-title">Human Verification</h2>
+            <p class="verify-subtitle">Please verify that you're human to access Tolerable AI</p>
+
+            <div class="giphy-container">
+                <!-- Giphy Embed -->
+                <iframe src="https://giphy.com/embed/3o7TKSjRrfIPjeiVyM" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+                <p><a href="https://giphy.com/gifs/afv-funny-fail-lol-3o7TKSjRrfIPjeiVyM">via GIPHY</a></p>
+            </div>
+
+            <form class="verification-form" action="/verify" method="post">
+                <p>What is happening in this GIF? (Hint: Look at what the person is doing)</p>
+                <input type="text" name="answer" class="verification-input" placeholder="Your answer..." required>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">Example: "Someone is falling" or "A person tripping"</p>
+                <br>
+                <button type="submit" class="verification-button">Verify</button>
+            </form>
+
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% endif %}
+
+            <p class="hint">This verification helps us ensure that you're a human and not a robot.</p>
+        </main>
+
+        <footer>
+            <p class="footer-text">
+                TOLERABLE AI POWERED BY P1-1776<br>
+                PERPLEXITY AI<br>
+                <a href="#" id="about-link" style="font-size: 10px; color: #666; text-decoration: none;">About</a> •
+                <a href="/terms" style="font-size: 10px; color: #666; text-decoration: none;">Terms of Service</a> •
+                <a href="/privacy" style="font-size: 10px; color: #666; text-decoration: none;">Privacy Statement</a> •
+                <a href="https://github.com/tolerable-ai/tolerable-ai" target="_blank" style="font-size: 10px; color: #666; text-decoration: none;">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

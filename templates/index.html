@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tolerable AI - Explore media topics with an AI assistant powered by Perplexity AI">
+    <meta name="keywords" content="AI, media, movies, music, books, entertainment, Perplexity">
+    <meta name="author" content="Tolerable AI">
+    <meta name="theme-color" content="#ffeee6">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Tolerable AI">
+    <meta property="og:description" content="Explore media topics with an AI assistant powered by Perplexity AI">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Tolerable AI interface">
+    <meta property="twitter:card" content="summary_large_image">
+
+    <title>Tolerable AI - Media Explorer</title>
+
+    <!-- Favicon (SVG only) -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="search-container">
+                <form id="search-form">
+                    <input type="text" id="search-input" placeholder="HERE SEARCH (Press / to focus)">
+                    <button type="submit" style="display: none;">Search</button>
+                </form>
+            </div>
+        </header>
+
+        <main>
+            <div id="response-container">
+                <p class="initial-text">Media shapes our culture and influences how we perceive the world around us, from entertainment to news and social discourse.</p>
+                <p class="highlighted-text">Critically engaging with media helps us understand diverse perspectives and develop a more nuanced view of complex topics. (like here the output will shown)</p>
+            </div>
+        </main>
+
+        <footer>
+            <p class="footer-text">
+                TOLERABLE AI POWERED BY P1-1776<br>
+                PERPLEXITY AI<br>
+                <a href="#" id="about-link" style="font-size: 10px; color: #666; text-decoration: none;">About</a> •
+                <a href="/terms" style="font-size: 10px; color: #666; text-decoration: none;">Terms of Service</a> •
+                <a href="/privacy" style="font-size: 10px; color: #666; text-decoration: none;">Privacy Statement</a> •
+                <a href="https://github.com/tolerable-ai/tolerable-ai" target="_blank" style="font-size: 10px; color: #666; text-decoration: none;">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3 class="modal-title">A Moment for Reflection</h3>
+            <div class="modal-body">
+                <div class="message-container">
+                    <i class="fas fa-pause-circle message-icon"></i>
+                    <div class="message-title">The digital landscape is taking a brief pause.</div>
+                    <p id="modal-message">Media has the power to transform our understanding of the world and connect us across different cultures and experiences.</p>
+                    <ul class="message-list">
+                        <li>The API may be experiencing high demand</li>
+                        <li>Our systems are processing many requests</li>
+                        <li>This is a temporary moment of reflection</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="modal-close-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close about-modal-close">&times;</span>
+            <h3 class="modal-title">About Tolerable AI</h3>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Tolerable AI Logo" width="100" height="100">
+                </div>
+                <p>Tolerable AI is a simple interface for exploring media topics using artificial intelligence.</p>
+                <p>Powered by Perplexity AI's r1-1776 model through the Together API, this application provides thoughtful responses about movies, music, books, and other media topics.</p>
+                <div class="message-container">
+                    <i class="fas fa-info-circle message-icon"></i>
+                    <div class="message-title">Features:</div>
+                    <ul class="message-list">
+                        <li>Media-focused AI responses</li>
+                        <li>Minimalist, distraction-free interface</li>
+                        <li>Thoughtful error handling</li>
+                        <li>Keyboard shortcuts for accessibility</li>
+                    </ul>
+                </div>
+                <p style="font-size: 12px; margin-top: 20px;">© 2025 Tolerable AI. This is a demonstration project.</p>
+                <p style="font-size: 10px;">
+                    <a href="/terms" style="color: #666; text-decoration: none;">Terms of Service</a> •
+                    <a href="/privacy" style="color: #666; text-decoration: none;">Privacy Statement</a>
+                </p>
+                <p style="font-size: 10px; margin-top: 5px;">
+                    <a href="https://github.com/tolerable-ai/tolerable-ai" target="_blank" style="color: #666; text-decoration: none;">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn about-modal-close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal handling functions
+        function showModal(message, isRateLimit = false) {
+            const modal = document.getElementById('error-modal');
+            const modalMessage = document.getElementById('modal-message');
+
+            // Set the message
+            modalMessage.textContent = message;
+
+            // Update modal title and icon based on error type
+            if (isRateLimit) {
+                document.querySelector('.modal-title').textContent = 'Taking a Brief Pause';
+                document.querySelector('.message-icon').className = 'fas fa-hourglass-half message-icon';
+                document.querySelector('.message-title').textContent = 'Our systems need a moment to catch up.';
+            } else {
+                document.querySelector('.modal-title').textContent = 'A Moment for Reflection';
+                document.querySelector('.message-icon').className = 'fas fa-pause-circle message-icon';
+                document.querySelector('.message-title').textContent = 'The digital landscape is taking a brief pause.';
+            }
+
+            // Display the modal
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('error-modal');
+            modal.style.display = 'none';
+        }
+
+        // Function to show the about modal
+        function showAboutModal() {
+            const modal = document.getElementById('about-modal');
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the about modal
+        function closeAboutModal() {
+            const modal = document.getElementById('about-modal');
+            modal.style.display = 'none';
+        }
+
+        // Add event listeners for modal close buttons
+        document.querySelector('.modal-close').addEventListener('click', closeModal);
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+
+        // Add event listeners for about modal
+        document.getElementById('about-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showAboutModal();
+        });
+
+        document.querySelectorAll('.about-modal-close').forEach(function(element) {
+            element.addEventListener('click', closeAboutModal);
+        });
+
+        // Add keyboard shortcuts for accessibility
+        document.addEventListener('keydown', function(e) {
+            // Close modals with Escape key
+            if (e.key === 'Escape') {
+                closeModal();
+                closeAboutModal();
+            }
+
+            // Focus on search box with / key
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('search-input').focus();
+            }
+        });
+
+        // Function to display results with enhanced formatting
+        function displayResult(result, isError = false) {
+            const responseContainer = document.getElementById('response-container');
+            responseContainer.innerHTML = '';
+
+            // Add the first paragraph (not highlighted)
+            const firstP = document.createElement('p');
+            firstP.textContent = "Media shapes our culture and influences how we perceive the world around us, from entertainment to news and social discourse.";
+            responseContainer.appendChild(firstP);
+
+            // Add the response as the highlighted paragraph
+            const highlightedP = document.createElement('p');
+
+            if (isError) {
+                // For errors, create a more structured message with an icon
+                const messageContainer = document.createElement('div');
+                messageContainer.className = 'message-container';
+
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-info-circle message-icon';
+                messageContainer.appendChild(icon);
+
+                const message = document.createElement('span');
+                message.textContent = result;
+                messageContainer.appendChild(message);
+
+                highlightedP.appendChild(messageContainer);
+            } else {
+                // For normal responses, just show the text
+                highlightedP.textContent = result;
+            }
+
+            highlightedP.classList.add('highlighted-text');
+            responseContainer.appendChild(highlightedP);
+        }
+
+        // Form submission handler
+        document.getElementById('search-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const query = document.getElementById('search-input').value;
+            if (!query) return;
+
+            try {
+                // Show loading state with animation
+                const responseContainer = document.getElementById('response-container');
+                responseContainer.innerHTML = `
+                    <div class="loading-container">
+                        <i class="fas fa-compact-disc loading-icon"></i>
+                        <p class="loading-text">Exploring the media landscape...</p>
+                    </div>
+                `;
+
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'query': query
+                    })
+                });
+
+                const data = await response.json();
+
+                // Check for error indicators in the response
+                if (data.error) {
+                    console.error('Error:', data.error);
+
+                    // Show modal for rate limit errors
+                    if (data.error.includes('rate limit')) {
+                        showModal("Our systems are processing many requests right now. Media has the power to transform our understanding of the world and connect us across different cultures and experiences. Let's continue our conversation shortly.", true);
+                    }
+
+                    // Display error message in the UI
+                    displayResult(data.result || "I'm taking a moment to reflect on your question. The digital landscape is constantly evolving, offering us new ways to engage with media and share our experiences.", true);
+                    return;
+                }
+
+                // For successful responses, just display the result
+                displayResult(data.result);
+
+            } catch (error) {
+                // Log the error to the console for debugging
+                console.error('Error:', error);
+
+                // Show modal for network errors
+                showModal("It seems we're experiencing a brief disconnection. Media connects us across distances and time, but sometimes technical connections need a moment to stabilize.");
+
+                // Display error message in the UI
+                displayResult("I'm taking a moment to reflect on your question. The digital landscape is constantly evolving, offering us new ways to engage with media and share our experiences.", true);
+            }
+        });
+    </script>
+</body>
+</html>
